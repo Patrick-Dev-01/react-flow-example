@@ -18,6 +18,10 @@
   border: none;
 }
 
+.inputs input{
+  outline: none;
+}
+
 .title{
   border: none;
   border-bottom: 1px solid #222;
@@ -26,4 +30,10 @@
 .text{
   margin-bottom: 0.5rem;
   resize: none;
+}
+
+.deleteButton{
+  background: none;
+  border: none;
+  cursor: pointer;
 }

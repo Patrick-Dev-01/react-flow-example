@@ -3,11 +3,13 @@ body {
   margin: 0;
   font-family: sans-serif;
 }
- 
-#app {
-  width: 100vw;
+
+
+.app{
+  width: 100%;
   height: 100vh;
-  z-index: 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 .toolbar{
@@ -24,4 +26,30 @@ body {
   position: fixed;
   z-index: 1;
   translate: 1/2;
+}
+
+.actions{
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+}
+
+.actions button{
+  width: 100px;
+  height: 30px;
+  border: none;
+  background: #5238C9;
+  color: #fff;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 3px 1px #c8c8c8;
+  cursor: pointer;
+}
+
+.actions button:hover{
+  transition: 0.5s;
+  filter: brightness(85%);
 }
