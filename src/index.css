@@ -4,52 +4,11 @@ body {
   font-family: sans-serif;
 }
 
-
-.app{
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: space-between;
-}
-
-.toolbar{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  width: 20%;
-  height: 80vh;
-  background: #fff;
-  box-shadow: 1px 1px 4px 1px rgb(160, 160, 160);
-  border-radius: 4px;
-  position: fixed;
-  z-index: 1;
-  translate: 1/2;
-}
-
-.actions{
-  height: fit-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-right: 1rem;
-  margin-top: 0.5rem;
-}
-
-.actions button{
-  width: 100px;
-  height: 30px;
+input, button{
+  outline: none;
   border: none;
-  background: #5238C9;
-  color: #fff;
-  box-sizing: border-box;
-  box-shadow: 1px 1px 3px 1px #c8c8c8;
-  cursor: pointer;
 }
 
-.actions button:hover{
-  transition: 0.5s;
-  filter: brightness(85%);
+button{
+  cursor: pointer;
 }

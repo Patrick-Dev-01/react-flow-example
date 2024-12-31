@@ -1,10 +1,9 @@
 import { Handle, Position } from '@xyflow/react';
 import './textUpdater.css';
 import { useEffect, useState } from 'react';
-import { Trash } from '@phosphor-icons/react';
-import TrashIcon from '../../assets/trash-2.svg';
+import { Cube, TrashSimple } from '@phosphor-icons/react';
  
-export function TextUpdater({ id, data, deleteNode, teste }) {
+export function TextUpdater({ id, data, deleteNode }) {
   const [title, setTitle] = useState(data.title || "");
   const [text, setText] = useState(data.text || "");
   
@@ -27,13 +26,16 @@ export function TextUpdater({ id, data, deleteNode, teste }) {
   return (
     <div className="text-updater-node">
       <Handle type="target" position={Position.Top} id='a' />
-      <div className='inputs'>
-        <input className='title' type="text" name='title' placeholder='...' onChange={handleChangeTitle}/>
-        <textarea className="text" id="text" name="text" onChange={handleChangeText} placeholder='...' />
-      </div>
-      <button type='button' className='deleteButton' onClick={() => handleDeleteNode(id)}>
-        <img src={TrashIcon} alt="" />
-      </button>
+      <header className='header'>
+        <div className="title">
+          <Cube size={12}/>
+          <input type="text" name='title' placeholder='...' onChange={handleChangeTitle}/>
+        </div>
+        <button type='button' className='deleteButton' onClick={() => handleDeleteNode(id)}>
+          <TrashSimple size={10}/>
+        </button>
+      </header>
+      <textarea className="text" id="text" rows={5} name="text" onChange={handleChangeText} placeholder='...' />
       <Handle type="source" position={Position.Bottom} id="b" />
     </div>
   );

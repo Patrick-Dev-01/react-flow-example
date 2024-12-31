@@ -5,6 +5,7 @@ import { ReactFlow, Controls, Background, applyEdgeChanges, applyNodeChanges, ad
 import '@xyflow/react/dist/style.css';
 import { TextUpdater } from './CustomNodes/TextUpdater/TextUpdater';
 import { SimpleNode } from './CustomNodes/SimpleNode/SimpleNode';
+import { NodeSelect } from './CustomNodes/NodeSelect/NodeSelect';
 
 const initialNodes = [
   {
@@ -16,7 +17,8 @@ const initialNodes = [
 
 const nodeTypes = { 
   textUpdater: TextUpdater,
-  simpleNode: SimpleNode
+  simpleNode: SimpleNode,
+  nodeSelect: NodeSelect
 }
 
 function App(){
@@ -80,13 +82,31 @@ function Flow() {
         id: uuid(),
         type: 'simpleNode',
         position: { x: 250, y: 5 },
-        data: { value: "" }
+        data: { 
+          value: "",
+          deleteNode: deleteNode,  
+        }
     }
 
     setNodes((nds) => [...nds, newNode]);
   }
 
-  
+  const addNodeSelect = () => {
+    const newNode = {
+      id: uuid(),
+      type: `nodeSelect`,
+      position: { x: 250, y: 5 },
+      data: {
+        title: "",
+        text: "",
+        deleteNode: deleteNode, 
+      },
+      
+    }
+
+    setNodes((nds) => [...nds, newNode]);
+  }
+
   const addTextUpdaterNode = () => {
     const newNode = {
       id: uuid(),
@@ -130,10 +150,12 @@ function Flow() {
         <div className="block-types">
           <button type='button' onClick={addSimpleNode}>Simple Node</button>
         </div>
+        <div className='block-types'>
+          <button type='button'>Node Select</button>
+        </div>
         <div className="block-types">
           <button type='button' onClick={addTextUpdaterNode}>Text Updater</button>
         </div>
-
         <button type='button' onClick={submitNodes}>Submit diagram</button>
       </div>
      
@@ -151,9 +173,14 @@ function Flow() {
           <Background />
           <Controls />
         </ReactFlow>
-        <div className='actions'>
-          <button type='button' onClick={onSave}>Save</button>
-          <button type='button' onClick={onRestore}>Restore</button>
+        <div className='rightToolbar'>
+          <div className='actions'>
+            <button type='button' onClick={onSave}>Save</button>
+            <button type='button' onClick={onRestore}>Restore</button>
+          </div>
+          <div className='nodeOptions'>
+            <h1>Node options</h1>
+          </div>
         </div>
     </div>
   )

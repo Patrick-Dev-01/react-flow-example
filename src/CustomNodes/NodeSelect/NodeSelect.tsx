@@ -1,9 +1,9 @@
 import { Handle, NodeToolbar, Position } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import './simpleNode.css';
+import './nodeselect.css';
 import { Cube, TrashSimple } from "@phosphor-icons/react";
 
-export function SimpleNode({ data }){
+export function NodeSelect({ data }){
     const [title, setTitle] = useState(data.title || "");
 
     const handleChangeTitle = (e) => {
@@ -17,6 +17,7 @@ export function SimpleNode({ data }){
     
     return (
         <div className="nodeBlock">
+        
             <Handle type="target" position={Position.Top} id="a"/>
             <header className='header'>
                 <div className="title">
@@ -27,6 +28,9 @@ export function SimpleNode({ data }){
                     <TrashSimple size={10}/>
                 </button>
             </header>
+            <section>
+
+            </section>
             <Handle type="source" position={Position.Bottom} id="b"/>
         </div>
     )
