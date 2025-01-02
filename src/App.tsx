@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import './App.css';
 import { ReactFlow, Controls, Background, applyEdgeChanges, applyNodeChanges, addEdge, useReactFlow, ReactFlowProvider } from '@xyflow/react';
@@ -6,6 +6,8 @@ import '@xyflow/react/dist/style.css';
 import { TextUpdater } from './CustomNodes/TextUpdater/TextUpdater';
 import { SimpleNode } from './CustomNodes/SimpleNode/SimpleNode';
 import { NodeSelect } from './CustomNodes/NodeSelect/NodeSelect';
+import { DnDProvider } from './context/dnd/DndContext';
+import { useDnD } from './hooks/useDnd';
 
 const initialNodes = [
   {
@@ -24,7 +26,9 @@ const nodeTypes = {
 function App(){
   return(
     <ReactFlowProvider>
-      <Flow />
+      <DnDProvider>
+        <Flow />
+      </DnDProvider>
     </ReactFlowProvider>
   )
 }
@@ -34,7 +38,8 @@ function Flow() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState([]);
   const [rfInstance, setRfInstance] = useState(null);
-  const { setViewport } = useReactFlow(); 
+  const { setViewport, screenToFlowPosition } = useReactFlow(); 
+  const [type, setType] = useDnD();
 
   const onSave = useCallback(() => {
     if(rfInstance){
@@ -44,18 +49,23 @@ function Flow() {
   }, [rfInstance]);
 
   const onRestore = useCallback(() => {
-    const restoreFlow = async () => {
-      const flow = JSON.parse(localStorage.getItem(flowKey));
+    const flow = localStorage.getItem(flowKey);
 
-      if(flow){
-        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-        setNodes(flow.nodes || []);
-        setEdges(flow.edges || []);
-        setViewport({ x, y, zoom });
-      }
-    };
+    if(flow){
+      const { nodes, edges, viewport } = JSON.parse(flow);
 
-    restoreFlow();
+      const restoredNodes = nodes.map(node => {
+          return {
+              ...node,
+              data: { ...node.data, deleteNode }, // Reatribui a função
+          };
+      });
+
+      const { x = 0, y = 0, zoom = 1 } = viewport;
+      setNodes(restoredNodes || []);
+      setEdges(edges || []);
+      setViewport({ x, y, zoom });
+    }
   }, [setNodes, setViewport]);
 
   const onNodesChange = useCallback(
@@ -77,58 +87,47 @@ function Flow() {
     setEdges((eds) => eds.filter((edge) => edge.id !== edgeId));
   }
 
-  const addSimpleNode = () => {
-    const newNode = {
-        id: uuid(),
-        type: 'simpleNode',
-        position: { x: 250, y: 5 },
-        data: { 
-          value: "",
-          deleteNode: deleteNode,  
-        }
+  const onDragStart = (event, nodeType) => {
+    setType(nodeType);
+    event.dataTransfer.effectAllowed = 'move';
+  };
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+ 
+  const onDrop = useCallback((event) => {
+    event.preventDefault();
+
+    if (!type) {
+      return;
     }
 
-    setNodes((nds) => [...nds, newNode]);
-  }
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
 
-  const addNodeSelect = () => {
-    const newNode = {
-      id: uuid(),
-      type: `nodeSelect`,
-      position: { x: 250, y: 5 },
-      data: {
-        title: "",
-        text: "",
-        deleteNode: deleteNode, 
-      },
-      
-    }
-
-    setNodes((nds) => [...nds, newNode]);
-  }
-
-  const addTextUpdaterNode = () => {
     const newNode = {
       id: uuid(),
-      type: `textUpdater`,
-      position: { x: 250, y: 5 },
+      type,
+      position,
       data: {
-        title: "",
-        text: "",
-        deleteNode: deleteNode, 
+        deleteNode: deleteNode,
       },
-      
-    }
+    };
+
+    setNodes((nds) => nds.concat(newNode));
     
-    setNodes((nds) => [...nds, newNode]);
-  }
+  }, [screenToFlowPosition, type]);
 
   function deleteNode(nodeId: string){
     setNodes((nds) => nds.filter((node) => node.id !== nodeId));
 
     setEdges((eds) => eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId));
   }
-  
+
   function submitNodes(){
     const cleanNodes = nodes.map(({id, position, type, data}) => {
       const { deleteNode, ...cleanData } = data;
@@ -147,16 +146,26 @@ function Flow() {
   return (
     <div className='app' style={{ height: '100vh' }}>
       <div className='toolbar'>
-        <div className="block-types">
+        <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'simpleNode')} draggable>
+          Simple Node
+        </div>
+        <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'textUpdater')} draggable>
+          Text Updater
+        </div>
+        <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'nodeSelect')} draggable>
+          Node Select
+        </div>
+        <button type='button' onClick={submitNodes}>Submit diagram</button> 
+        {/* <div className="block-types">
           <button type='button' onClick={addSimpleNode}>Simple Node</button>
         </div>
         <div className='block-types'>
-          <button type='button'>Node Select</button>
+          <button type='button' onClick={addNodeSelect}>Node Select</button>
         </div>
         <div className="block-types">
           <button type='button' onClick={addTextUpdaterNode}>Text Updater</button>
         </div>
-        <button type='button' onClick={submitNodes}>Submit diagram</button>
+          */}
       </div>
      
         <ReactFlow
@@ -168,6 +177,8 @@ function Flow() {
           nodeTypes={nodeTypes}
           onInit={setRfInstance}
           onEdgeClick={(event, edge) => removeEdge(edge.id)}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
           fitView
         >
           <Background />
@@ -179,7 +190,7 @@ function Flow() {
             <button type='button' onClick={onRestore}>Restore</button>
           </div>
           <div className='nodeOptions'>
-            <h1>Node options</h1>
+            
           </div>
         </div>
     </div>

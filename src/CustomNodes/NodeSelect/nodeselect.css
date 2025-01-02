@@ -1,0 +1,82 @@
+.nodeSelect{
+    width: 140px;
+    border: 1px solid #eee;
+    padding: 5px;
+    border-radius: 4px;
+    background: white;
+    border: 1px solid #222;
+}
+
+.header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #222;
+}
+
+.headerActions{
+    display: flex;
+    align-items: center;    
+}
+
+.headerActions button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    font-size: 0.50rem;
+}
+
+.title input{
+    width: 100%;
+    font-size: 0.50rem;
+}
+
+.inputBlock{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    margin: 0.5rem auto;
+}
+
+.inputBlock select{
+    height: 30px;
+    border: 1px solid #D4D4D4;
+    border-radius: 4px;
+    outline: none;
+}
+
+.inputBox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inputBox input{
+    width: 100%;
+    font-size: 0.50rem;
+}
+
+.inputBox button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.toolbarSelect{
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    gap: 0.5rem;
+    border: 1px solid #222;
+}
+  

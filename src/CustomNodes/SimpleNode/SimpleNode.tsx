@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import './simpleNode.css';
 import { Cube, TrashSimple } from "@phosphor-icons/react";
 
-export function SimpleNode({ data }){
+export function SimpleNode({ id, data }){
     const [title, setTitle] = useState(data.title || "");
 
     const handleChangeTitle = (e) => {
