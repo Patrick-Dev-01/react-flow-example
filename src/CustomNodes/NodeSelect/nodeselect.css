@@ -57,6 +57,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.2rem;
 }
 
 .inputBox input{
@@ -75,8 +76,43 @@
     background: #fff;
     display: flex;
     flex-direction: column;
+    width: 250px;
     height: 200px;
     gap: 0.5rem;
     border: 1px solid #222;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.toolbarSelect h1{
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.addOptions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addOptions{
+    
+}
+
+.optionsAdded{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.optionsAdded span{
+    display: flex;
+    justify-content: space-between;
+}
+
+.optionsAdded span button{
+    background: none;
 }
   
